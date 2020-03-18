@@ -1,14 +1,15 @@
 #include<bits/stdc++.h>
+//biblitecas de Socket
 #include<arpa/inet.h>
 #include<netinet/in.h>
 #include<sys/socket.h>
 #include<unistd.h>
+//bibliotecas de C
 #include<string.h>
 #include<stdlib.h>
 #include<stdio.h>
-#include<termios.h>
+//bibliteca pra thread
 #include<thread>
-#include<chrono>
 #include <iostream>
 
 //constantes para a variaçao de movimento, porta e endereço do servidor
