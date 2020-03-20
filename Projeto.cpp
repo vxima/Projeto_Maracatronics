@@ -3,6 +3,8 @@
 #include<arpa/inet.h>
 #include<netinet/in.h>
 #include<sys/socket.h>
+//bibliotecas pra getch
+#include<termios.h>
 #include<unistd.h>
 //bibliotecas de C
 #include<string.h>
@@ -30,10 +32,21 @@ int joint6=0;
 //variaveis auxiliares
 char buffer[1024]= {0};
 char parametro[1024] = {0};
-int getch(){ //incompleto, mas funcao que pegar o caracter lido do teclado
-    int ch;
-    return ch;
+
+//procurei na internet o getch para o linux 
+int getch( ) {
+  struct termios oldt, newt;
+  int ch;
+  tcgetattr( STDIN_FILENO, &oldt );
+  newt = oldt;
+  newt.c_lflag &= ~( ICANON | ECHO );
+  tcsetattr( STDIN_FILENO, TCSANOW, &newt );
+  ch = getchar();
+  tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
+  return ch;
 }
+
+//thread que vai movimentar as juntas de acordo com o que foi pressionado
 void keyp(){
     int key;
     while(1){
@@ -96,7 +109,7 @@ int main(){
 
     int server_fd , new_socket , valread;
     struct sockaddr_in address;
-    int opt1;
+    int opt = 1;
     int addrlen = sizeof(address);
     
     
@@ -217,3 +230,4 @@ int main(){
     }
     return 0;
 }
+
