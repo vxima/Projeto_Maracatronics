@@ -152,7 +152,7 @@ int main(){
             cout << "Erro em aceitar a conexao" << endl; 
             exit(1); 
         } 
-        int movement=-;
+        int movement=0;
         valread = read( new_socket , buffer, 1024); //valor lido do buffer 
         while(valread){
             string message;
