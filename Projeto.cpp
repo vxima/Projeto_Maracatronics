@@ -14,7 +14,6 @@
 #include<thread>
 #include <iostream>
 
-// para compilar: g++ Projeto.cpp -o projeto -pthread
 //constantes para a variaçao de movimento, porta e endereço do servidor
 #define delta 5
 #define PORT 8889
@@ -141,93 +140,106 @@ int main(){
     }
 
     //listen 
-    if(listen(server_fd , 1) <0){
-        cout << "Erro na escuta" << endl;
-        exit(1);
-    }
+    
 
     //conexao
     while(true){
-        cout << "esperando conexao" << endl;
-        if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0) { 
-            cout << "Erro em aceitar a conexao" << endl; 
-            exit(1); 
-        } 
-        int movement=0;
-        valread = read( new_socket , buffer, 1024); //valor lido do buffer 
-        while(valread){
-            string message;
-            for(int i=0 ; i < 1024 ; i++){
-                message += buffer[i];// colocando as mensgens do buffer na string 
-            }
+        if(listen(server_fd , 1) >= 0){
+            //cout << "sucesso na escuta" << endl;
             
-            //if e elses para as mensagens 
-            if(message == "CONNECTION_OPEN"){
-                strcpy(parametro , "CONNECTION_OPEN;;");
-                send(new_socket , parametro , strlen(parametro) , 0);
-            }
-            else if(message == "GET_NUM_ARMS"){
-                strcpy(parametro , "GET_NUM_ARMS;1;");
-                send(new_socket , parametro , strlen(parametro) , 0);
-            }
-            else if(message == "GET_ARM_CODNAME;1"){
-                strcpy(parametro , "GET_ARM_CODNAME;1;NS_00101");
-                send(new_socket , parametro , strlen(parametro) , 0);
-            }
-            else if(message == "GET_ARM_AXES;1"){
-                strcpy(parametro , "GET_ARM_AXES;1;111111----");
-                send(new_socket , parametro , strlen(parametro) , 0);
-            }
-            else if(message == "GET_ARM_AUX;1"){
-                strcpy(parametro , "GET_ARM_AUX;1;----------");
-                send(new_socket , parametro , strlen(parametro) , 0);
-            }
-            else if(message == "GET_ARM_BASE;1"){
-                strcpy(parametro , "GET_ARM_BASE;1;0;0;0;0;0;0");
-                send(new_socket , parametro , strlen(parametro) , 0);
-            }
-            else if(message == "GET_TOOL_RMT;1"){
-                strcpy(parametro , "GET_TOOL_RMT;1;False");
-                send(new_socket , parametro , strlen(parametro) , 0);
-            }
-            else if(message == "GET_ARM_ALL_FRAMES;1"){
-                strcpy(parametro , "GET_ARM_ALL_FRAMES;1;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0");
-                send(new_socket , parametro , strlen(parametro) , 0);
-            }
-            else if(message == "GET_ALL_JNT"){
-                strcpy(parametro , "GET_ALL_JNT;");
-                char auxiliar[3];
-                //auxiliar para converter o valor da junta em string para depois concatenar com o parametro
-                // faço isso para todas as 6 juntas 
-                sprintf(auxiliar , "%d;" , joint1);
-                strcat(parametro , auxiliar);
-                sprintf(auxiliar , "%d;" , joint2);
-                strcat(parametro , auxiliar);
-                sprintf(auxiliar , "%d;" , joint3);
-                strcat(parametro , auxiliar);
-                sprintf(auxiliar , "%d;" , joint4);
-                strcat(parametro , auxiliar);
-                sprintf(auxiliar , "%d;" , joint5);
-                strcat(parametro , auxiliar);
-                sprintf(auxiliar , "%d;" , joint6);
-                strcat(parametro , auxiliar);
-                //no final concateno com os outros 0
-                strcat(parametro  , ";0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0");
-
+            if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))>= 0) { 
+                //cout << "Sucesso em aceitar a conexao" << endl; 
                 
+            
+                int movement=0;
+                valread = read( new_socket , buffer, 1024); //valor lido do buffer
+                cout << valread << endl; 
+                while(valread){
+                    //cout << "entrou no while do valread" << endl;
+                    string message;
+                    for(int i=0 ; i < sizeof(buffer) / sizeof(char) ; i++){
+                        message += buffer[i];// colocando as mensgens do buffer na string
+                        if( buffer[i] == '>'){
+                            break;
+                        }
+                        
+                    }
+                    cout << "passou de carregar a message" << endl << message << endl;
+                    //if e elses para as mensagens 
+                    if(message == "<CONNECTION_OPEN>"){
+                        cout << "entrou no connection_open" << endl;
+                        strcpy(parametro , "CONNECTION_OPEN;;");
+                        send(new_socket , parametro , strlen(parametro) , 0);
+                    }
+                    else if(message == "<GET_NUM_ARMS>"){
+                        cout << "entrou no get_num_arms" << endl;
+                        strcpy(parametro , "GET_NUM_ARMS;1;");
+                        send(new_socket , parametro , strlen(parametro) , 0);
+                    }
+                    else if(message == "<GET_ARM_CODNAME;1>"){
+                        strcpy(parametro , "GET_ARM_CODNAME;1;NS_00101");
+                        send(new_socket , parametro , strlen(parametro) , 0);
+                    }
+                    else if(message == "<GET_ARM_AXES;1>"){
+                        strcpy(parametro , "GET_ARM_AXES;1;111111----");
+                        send(new_socket , parametro , strlen(parametro) , 0);
+                    }
+                    else if(message == "<GET_ARM_AUX;1>"){
+                        strcpy(parametro , "GET_ARM_AUX;1;----------");
+                        send(new_socket , parametro , strlen(parametro) , 0);
+                    }
+                    else if(message == "<GET_ARM_BASE;1>"){
+                        strcpy(parametro , "GET_ARM_BASE;1;0;0;0;0;0;0");
+                        send(new_socket , parametro , strlen(parametro) , 0);
+                    }
+                    else if(message == "<GET_TOOL_RMT;1>"){
+                        strcpy(parametro , "GET_TOOL_RMT;1;False");
+                        send(new_socket , parametro , strlen(parametro) , 0);
+                    }
+                    else if(message == "<GET_ARM_ALL_FRAMES;1>"){
+                        strcpy(parametro , "GET_ARM_ALL_FRAMES;1;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0");
+                        send(new_socket , parametro , strlen(parametro) , 0);
+                    }
+                    else if(message == "<GET_AUX_BASE;1>"){
+                        strcpy(parametro , "GET_AUX_BASE;1;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0");
+                        send(new_socket , parametro , strlen(parametro) , 0);
+                    }
+                    else if(message == "<GET_ALL_JNT>"){
+                        strcpy(parametro , "GET_ALL_JNT;");
+                        char auxiliar[3];
+                        //auxiliar para converter o valor da junta em string para depois concatenar com o parametro
+                        // faço isso para todas as 6 juntas 
+                        sprintf(auxiliar , "%d;" , joint1);
+                        strcat(parametro , auxiliar);
+                        sprintf(auxiliar , "%d;" , joint2);
+                        strcat(parametro , auxiliar);
+                        sprintf(auxiliar , "%d;" , joint3);
+                        strcat(parametro , auxiliar);
+                        sprintf(auxiliar , "%d;" , joint4);
+                        strcat(parametro , auxiliar);
+                        sprintf(auxiliar , "%d;" , joint5);
+                        strcat(parametro , auxiliar);
+                        sprintf(auxiliar , "%d;" , joint6);
+                        strcat(parametro , auxiliar);
+                        //no final concateno com os outros 0
+                        strcat(parametro  , ";0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0");
 
-                send(new_socket , parametro , strlen(parametro) , 0);
-                movement++;
+                        
+
+                        send(new_socket , parametro , strlen(parametro) , 0);
+                        movement++;
+                    }
+                    else if(message == "<GET_IR_TYPES>"){
+                        cout << "chegou ate o type" << endl;
+                        strcpy(parametro , "GET_IR_TYPES;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0");
+                        send(new_socket , parametro , strlen(parametro) , 0);
+                        
+                    }
+                    valread = read( new_socket , buffer, 1024);
+                }
+                cout << "Conexao encerrada" << endl;
             }
-            else if(message == "GET_IR_TYPES"){
-                strcpy(parametro , "GET_IR_TYPES;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0");
-                send(new_socket , parametro , strlen(parametro) , 0);
-                
-            }
-            valread = read( new_socket , buffer, 1024);
         }
-        cout << "Conexao encerrada" << endl;
-        
     }
     return 0;
 }
