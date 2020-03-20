@@ -11,6 +11,7 @@
 #include<stdlib.h>
 #include<stdio.h>
 //bibliteca pra thread
+#include<chrono>
 #include<thread>
 #include <iostream>
 
@@ -21,13 +22,11 @@
 
 using namespace std;
 
-// variaveis das juntas 
-int joint1=0;
-int joint2=0;
-int joint3=0;
-int joint4=0;
-int joint5=0;
-int joint6=0;
+
+
+// variaveis da juntas em um array
+
+int joint[6] = {};
 
 //variaveis auxiliares
 char buffer[1024]= {0};
@@ -46,6 +45,47 @@ int getch( ) {
   return ch;
 }
 
+
+//funcoes extras 
+
+void Giro360(){
+    cout << "Giro 360 graus" << endl;
+     for(int i = 0 ; i < 360 ; i ++){
+        joint[0] = (joint[0] + 1)%360;
+        this_thread::sleep_for(chrono::milliseconds(5));//funcao que faz a thread dormir para ter um delay na movimentacao
+    }
+}
+void Reset(){
+    cout << "Reiniciando" << endl;
+    for(int i = 0 ; i < 6 ; i++){
+        while(1){
+            if(joint[i] == 0){
+                break;
+            }
+            else{
+                joint[i] = (joint[i] + 1)%360;
+                this_thread::sleep_for(chrono::milliseconds(10));
+            }
+        }
+    }
+}
+
+void Acenar(){
+    cout << "Giro 180 graus para acenar" << endl;
+    for(int i = 0 ; i < 90 ; i++){
+        joint[1] = (joint[1] + 1)%360;
+        this_thread::sleep_for(chrono::milliseconds(10));
+    } 
+    for(int i = 0 ; i < 180 ; i++){
+        joint[1] = (joint[1] - 1)%360;
+        this_thread::sleep_for(chrono::milliseconds(10));
+    } 
+    for(int i = 0 ; i < 90 ; i++){
+        joint[1] = (joint[1] + 1)%360;
+        this_thread::sleep_for(chrono::milliseconds(10));
+    } 
+
+}
 //thread que vai movimentar as juntas de acordo com o que foi pressionado
 void keyp(){
     int key;
@@ -53,46 +93,63 @@ void keyp(){
         key = getch();
         // junta 1
         if(key == 'q'){
-            joint1 += delta;
+            joint[0] = (joint[0] + delta)%360;
         }
         else if(key == 'a'){
-            joint1 -= delta;
+            joint[0] = (joint[0] - delta)%360;
         }
         // junta 2
         else if(key == 'w'){
-            joint2 += delta;
+            joint[1] = (joint[1] + delta)%360;
         }
         else if(key == 's'){
-            joint2 -= delta;
+            joint[1] = (joint[1] - delta)%360;
         }
         // junta 3
         else if(key == 'e'){
-            joint3 += delta;
+            joint[2] = (joint[2] + delta)%360;
         }
         else if(key == 'd'){
-            joint3 -= delta;
+            joint[2] = (joint[2] - delta)%360;
         }
         // junta 4
         else if(key == 'r'){
-            joint4 += delta;
+            joint[3] = (joint[3] + delta)%360;
         }
         else if(key == 'f'){
-            joint4 -= delta;
+            joint[3]= (joint[3] - delta)%360;
         }
         //junta 5
         else if(key == 't'){
-            joint5 += delta;
+            joint[4] = (joint[4] + delta)%360;
         }
         else if(key == 'g'){
-            joint5 -= delta;
+            joint[4] = (joint[4] - delta)%360;
         }
         //junta 6
         else if(key == 'y'){
-            joint6 += delta;
+            joint[5] = (joint[5] + delta)%360;
         }
         else if(key == 'h'){
-            joint6 -= delta;
+            joint[5] = (joint[5] - delta)%360;
         }
+
+        //funcao para girar 360 graus
+        else if (key == 'z'){
+            Giro360();
+        }
+
+        //funcao pra acenar
+        else if(key == 'x'){
+            Acenar();
+        }
+
+        //funcao pra resetar
+        else if(key == 'c'){
+            Reset();
+        }
+
+
         //apertou ESC para sair 
         else if(key == 27){
             exit(1);
@@ -164,15 +221,15 @@ int main(){
                         }
                         
                     }
-                    cout << "passou de carregar a message" << endl << message << endl;
+                    //cout << "passou de carregar a message" << endl << message << endl;
                     //if e elses para as mensagens 
                     if(message == "<CONNECTION_OPEN>"){
-                        cout << "entrou no connection_open" << endl;
+                        //cout << "entrou no connection_open" << endl;
                         strcpy(parametro , "CONNECTION_OPEN;;");
                         send(new_socket , parametro , strlen(parametro) , 0);
                     }
                     else if(message == "<GET_NUM_ARMS>"){
-                        cout << "entrou no get_num_arms" << endl;
+                        //cout << "entrou no get_num_arms" << endl;
                         strcpy(parametro , "GET_NUM_ARMS;1;");
                         send(new_socket , parametro , strlen(parametro) , 0);
                     }
@@ -209,18 +266,12 @@ int main(){
                         char auxiliar[3];
                         //auxiliar para converter o valor da junta em string para depois concatenar com o parametro
                         // faço isso para todas as 6 juntas 
-                        sprintf(auxiliar , "%d;" , joint1);
-                        strcat(parametro , auxiliar);
-                        sprintf(auxiliar , "%d;" , joint2);
-                        strcat(parametro , auxiliar);
-                        sprintf(auxiliar , "%d;" , joint3);
-                        strcat(parametro , auxiliar);
-                        sprintf(auxiliar , "%d;" , joint4);
-                        strcat(parametro , auxiliar);
-                        sprintf(auxiliar , "%d;" , joint5);
-                        strcat(parametro , auxiliar);
-                        sprintf(auxiliar , "%d;" , joint6);
-                        strcat(parametro , auxiliar);
+                        
+
+                        for(int i = 0 ; i < 6 ;i++){
+                            sprintf(auxiliar , "%d;" , joint[i]);
+                            strcat(parametro , auxiliar);
+                        }
                         //no final concateno com os outros 0
                         strcat(parametro  , ";0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0");
 
@@ -230,7 +281,7 @@ int main(){
                         movement++;
                     }
                     else if(message == "<GET_IR_TYPES>"){
-                        cout << "chegou ate o type" << endl;
+                        //cout << "chegou ate o type" << endl;
                         strcpy(parametro , "GET_IR_TYPES;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0");
                         send(new_socket , parametro , strlen(parametro) , 0);
                         
