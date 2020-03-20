@@ -34,7 +34,7 @@ char buffer[1024]= {0};
 char parametro[1024] = {0};
 
 //procurei na internet o getch para o linux 
-int getch() {
+int getch( ) {
   struct termios oldt, newt;
   int ch;
   tcgetattr( STDIN_FILENO, &oldt );
@@ -135,7 +135,7 @@ int main(){
     //bind o ip e a porta 
 
     if(bind(server_fd , (struct sockaddr *) &address , sizeof(address))<0){
-        cout << "Erro bind" < endl;
+        cout << "Erro bind" << endl;
         exit(1);
     }
 
