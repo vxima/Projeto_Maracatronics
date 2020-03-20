@@ -34,7 +34,7 @@ char buffer[1024]= {0};
 char parametro[1024] = {0};
 
 //procurei na internet o getch para o linux 
-int getch( ) {
+int getch() {
   struct termios oldt, newt;
   int ch;
   tcgetattr( STDIN_FILENO, &oldt );
@@ -59,35 +59,35 @@ void keyp(){
             joint1 -= delta;
         }
         // junta 2
-        if(key == 'w'){
+        else if(key == 'w'){
             joint2 += delta;
         }
         else if(key == 's'){
             joint2 -= delta;
         }
         // junta 3
-        if(key == 'e'){
+        else if(key == 'e'){
             joint3 += delta;
         }
         else if(key == 'd'){
             joint3 -= delta;
         }
         // junta 4
-        if(key == 'r'){
+        else if(key == 'r'){
             joint4 += delta;
         }
         else if(key == 'f'){
             joint4 -= delta;
         }
         //junta 5
-        if(key == 't'){
+        else if(key == 't'){
             joint5 += delta;
         }
         else if(key == 'g'){
             joint5 -= delta;
         }
         //junta 6
-        if(key == 'y'){
+        else if(key == 'y'){
             joint6 += delta;
         }
         else if(key == 'h'){
