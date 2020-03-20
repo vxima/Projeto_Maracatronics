@@ -156,7 +156,7 @@ int main(){
         valread = read( new_socket , buffer, 1024); //valor lido do buffer 
         while(valread){
             string message;
-            for(int i=0 ; i < 1024 , i++){
+            for(int i=0 ; i < 1024 ; i++){
                 message += buffer[i];// colocando as mensgens do buffer na string 
             }
             
