@@ -14,7 +14,7 @@
 #include<thread>
 #include <iostream>
 
-// para compilar: g++ Projeto_maraca.cpp -o projeto -pthread
+// para compilar: g++ Projeto.cpp -o projeto -pthread
 //constantes para a variaçao de movimento, porta e endereço do servidor
 #define delta 5
 #define PORT 8889
