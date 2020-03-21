@@ -2,7 +2,7 @@
 
 ## Código em C++ para movimentação do braço robótico no simulador para o processo seletivo do maracatronics.
 
-**_para compilar g++ Projeto.cpp -o Projeto -pthread_**
+**_Para compilar no linux:  g++ Projeto.cpp -o Projeto -pthread_**
 
 ### Seguindo as especificações 
 IP: 127.0.0.1
