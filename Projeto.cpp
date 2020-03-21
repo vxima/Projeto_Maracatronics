@@ -15,6 +15,10 @@
 #include<thread>
 #include <iostream>
 
+
+//para compilar g++ Projeto.cpp -o Projeto -pthread
+
+
 //constantes para a variaçao de movimento, porta e endereço do servidor
 #define delta 5
 #define PORT 8889
