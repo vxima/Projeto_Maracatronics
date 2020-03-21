@@ -21,8 +21,16 @@ Junta#5 : 't' e 'g'
 
 Junta#6 : 'y' e 'h'
 
-Giro360: 'z'
+### Funções extras de movimentação
+
+Giro360 : 'z'
 
 Acenar : 'x'
 
 Reiniciar : 'c'
+
+Joinha : 'v'
+
+Reiniciar em paralelo : 'b'
+
+
