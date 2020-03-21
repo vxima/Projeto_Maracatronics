@@ -1,11 +1,13 @@
 # Projeto_Maracatronics
 
-Código em C++ para movimentação do braço robótico no simulador.
+## Código em C++ para movimentação do braço robótico no simulador.
 
+### Seguindo as especificações 
 IP: 127.0.0.1
+
 Port: 8889
 
-Teclas a serem pressionadas:
+### Teclas a serem pressionadas:
 
 Junta#1 : 'q' e 'a'
 
