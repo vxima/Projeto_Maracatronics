@@ -55,6 +55,25 @@ void Giro360(){
         this_thread::sleep_for(chrono::milliseconds(5));//funcao que faz a thread dormir para ter um delay na movimentacao
     }
 }
+
+void Reset_joint(int i){
+    while(1){
+            if(joint[i] == 0){
+                break;
+            }
+            else{
+                joint[i] = (joint[i] + 1)%360;
+                this_thread::sleep_for(chrono::milliseconds(10));
+            }
+        }
+} 
+void Reset_with_thread(){
+    cout << "Reiniciando em paralelo!" << endl;
+    for(int i = 0 ; i < 6 ; i++){
+        thread (Reset_joint , i).detach();//criando threads para reiniciar cada junta em paralelo
+        
+    }
+}
 void Reset(){
     cout << "Reiniciando" << endl;
     for(int i = 0 ; i < 6 ; i++){
@@ -73,10 +92,16 @@ void Reset(){
 void Acenar(){
     cout << "Giro 180 graus para acenar" << endl;
     for(int i = 0 ; i < 90 ; i++){
+        if(joint[1] == 180){
+            break;//parar para nao atravessar o chao
+        }
         joint[1] = (joint[1] + 1)%360;
         this_thread::sleep_for(chrono::milliseconds(10));
     } 
     for(int i = 0 ; i < 180 ; i++){
+        if(joint[1] == 0){
+            break;
+        }
         joint[1] = (joint[1] - 1)%360;
         this_thread::sleep_for(chrono::milliseconds(10));
     } 
@@ -86,6 +111,19 @@ void Acenar(){
     } 
 
 }
+void Joinha(){
+    cout << "Dá um joinha!" << endl;
+    Reset();
+    for(int i = 0 ; i < 45 ; i++){
+        joint[1] = (joint[1]+1)%360;
+        this_thread::sleep_for(chrono::milliseconds(10));
+    }
+    for(int i = 0 ;  i < 45 ; i++){
+        joint[5] = (joint[5] - 1)%360;
+        this_thread::sleep_for(chrono::milliseconds(10));
+    }
+}
+
 //thread que vai movimentar as juntas de acordo com o que foi pressionado
 void keyp(){
     int key;
@@ -148,7 +186,12 @@ void keyp(){
         else if(key == 'c'){
             Reset();
         }
-
+        else if(key == 'v'){
+            Joinha();
+        }
+        else if(key == 'b'){
+            Reset_with_thread();
+        }
 
         //apertou ESC para sair 
         else if(key == 27){
@@ -205,12 +248,12 @@ int main(){
             //cout << "sucesso na escuta" << endl;
             
             if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))>= 0) { 
-                //cout << "Sucesso em aceitar a conexao" << endl; 
+                cout << "Sucesso em aceitar a conexao" << endl; 
                 
             
                 int movement=0;
                 valread = read( new_socket , buffer, 1024); //valor lido do buffer
-                cout << valread << endl; 
+                //cout << valread << endl; 
                 while(valread){
                     //cout << "entrou no while do valread" << endl;
                     string message;
