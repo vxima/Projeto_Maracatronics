@@ -7,30 +7,30 @@ IP: 127.0.0.1
 
 Port: 8889
 
-### Teclas a serem pressionadas:
+### Teclas a serem pressionadas , a primeira para adicionar angulo e a segunda para subtrair angulo:
 
-Junta#1 : 'q' e 'a'
+*Junta#1* : 'q' e 'a'
 
-Junta#2 : 'w' e 's'
+*Junta#2* : 'w' e 's'
 
-Junta#3 : 'e' e 'd'
+*Junta#3* : 'e' e 'd'
 
-Junta#4 : 'r' e 'f'
+*Junta#4* : 'r' e 'f'
 
-Junta#5 : 't' e 'g'
+*Junta#5* : 't' e 'g'
 
-Junta#6 : 'y' e 'h'
+*Junta#6* : 'y' e 'h'
 
 ### Funções extras de movimentação
 
-Giro360 : 'z'
+*Giro360* : 'z'
 
-Acenar : 'x'
+*Acenar* : 'x'
 
-Reiniciar : 'c'
+*Reiniciar* : 'c'
 
-Joinha : 'v'
+*Joinha* : 'v'
 
-Reiniciar em paralelo : 'b'
+*Reiniciar em paralelo* : 'b'
 
 
