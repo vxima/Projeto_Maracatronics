@@ -63,7 +63,7 @@ void Reset_joint(int i){
             }
             else{
                 joint[i] = (joint[i] + 1)%360;
-                this_thread::sleep_for(chrono::milliseconds(10));
+                this_thread::sleep_for(chrono::milliseconds(5));
             }
         }
 } 
