@@ -1,6 +1,6 @@
 # Projeto_Maracatronics
 
-## Código em C++ para movimentação do braço robótico no simulador.
+## Código em C++ para movimentação do braço robótico no simulador para o processo seletivo do maracatronics.
 
 ### Seguindo as especificações 
 IP: 127.0.0.1
